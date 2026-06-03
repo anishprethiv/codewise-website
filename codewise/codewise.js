@@ -68,23 +68,58 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ── CONTACT FORM ──
   const contactForm = document.getElementById('contactForm');
+
   if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
+    contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
+
       const btn = contactForm.querySelector('button[type="submit"]');
       btn.textContent = 'Sending...';
       btn.disabled = true;
-      setTimeout(() => {
+
+      const formData = {
+        date: new Date().toLocaleString(),
+        name: document.getElementById('name').value,
+        phone: document.getElementById('phone').value,
+        email: document.getElementById('email').value,
+        business: document.getElementById('business').value,
+        interest: document.getElementById('interest').value,
+        budget: document.getElementById('budget').value,
+        message: document.getElementById('message').value,
+        status: 'New Lead',
+        source: 'Website'
+      };
+
+      try {
+        const response = await fetch(
+          'https://script.google.com/macros/s/AKfycbxWiIYSe1W3fFD2zgqaVxbJxATQHcbiEDEh90luAnwUQOUAO94nzH83g-FOBFlbHBGAxA/exec',
+          {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+          }
+        );
+
         contactForm.innerHTML = `
           <div class="form-success">
             <div class="checkmark">✅</div>
-            <h3>Message Sent!</h3>
-            <p>Thank you for reaching out. Anish will get back to you as soon as possible.</p>
+            <h3>Lead Captured!</h3>
+            <p>Thank you for reaching out. We'll contact you soon.</p>
           </div>
         `;
-      }, 1200);
+
+      } catch (error) {
+        console.error(error);
+        btn.textContent = 'Send Message →';
+        btn.disabled = false;
+        alert('Unable to submit form. Please try again.');
+      }
     });
   }
+
 
   console.log('%c⚡ Codewise — Building in public ✨', 'color: #d4a843; font-weight: bold; font-size: 14px;');
 });
