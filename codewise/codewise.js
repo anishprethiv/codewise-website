@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
         status: 'New Lead',
         source: 'Website'
       };
-
+      console.log("FORM DATA:", formData);
       try {
         const response = await fetch(
           'https://script.google.com/macros/s/AKfycbxWiIYSe1W3fFD2zgqaVxbJxATQHcbiEDEh90luAnwUQOUAO94nzH83g-FOBFlbHBGAxA/exec',
