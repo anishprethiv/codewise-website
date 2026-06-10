@@ -69,57 +69,62 @@ document.addEventListener('DOMContentLoaded', () => {
   // ── CONTACT FORM ──
   const contactForm = document.getElementById('contactForm');
 
-  if (contactForm) {
-    contactForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
+if (contactForm) {
+  contactForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-      const btn = contactForm.querySelector('button[type="submit"]');
-      btn.textContent = 'Sending...';
-      btn.disabled = true;
+    const btn = contactForm.querySelector('button[type="submit"]');
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
 
-      const formData = {
-        date: new Date().toLocaleString(),
-        name: document.getElementById('name').value,
-        phone: document.getElementById('phone').value,
-        email: document.getElementById('email').value,
-        business: document.getElementById('business').value,
-        interest: document.getElementById('interest').value,
-        budget: document.getElementById('budget').value,
-        message: document.getElementById('message').value,
-        status: 'New Lead',
-        source: 'Website'
-      };
-      console.log("FORM DATA:", formData);
-      try {
-        const response = await fetch(
-          'https://script.google.com/macros/s/AKfycbxWiIYSe1W3fFD2zgqaVxbJxATQHcbiEDEh90luAnwUQOUAO94nzH83g-FOBFlbHBGAxA/exec',
-          {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-          }
-        );
+    const formData = {
+      name: document.getElementById('name').value,
+      phone: document.getElementById('phone').value,
+      email: document.getElementById('email').value,
+      business: document.getElementById('business').value,
+      interest: document.getElementById('interest').value,
+      budget: document.getElementById('budget').value,
+      message: document.getElementById('message').value
+    };
 
-        contactForm.innerHTML = `
-          <div class="form-success">
-            <div class="checkmark">✅</div>
-            <h3>Lead Captured!</h3>
-            <p>Thank you for reaching out. We'll contact you soon.</p>
-          </div>
-        `;
+    try {
 
-      } catch (error) {
-        console.error(error);
-        btn.textContent = 'Send Message →';
-        btn.disabled = false;
-        alert('Unable to submit form. Please try again.');
+      const response = await fetch(
+        'https://formspree.io/f/mgobzpnw',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Submission failed');
       }
-    });
-  }
 
+      contactForm.innerHTML = `
+        <div style="text-align:center;padding:40px;">
+          <h3>✅ Lead Captured Successfully!</h3>
+          <p>Thank you for contacting Codewise.</p>
+          <p>We will get back to you shortly.</p>
+        </div>
+      `;
+
+    } catch (error) {
+
+      alert('Something went wrong. Please try again.');
+
+      btn.textContent = 'Send Message →';
+      btn.disabled = false;
+
+      console.error(error);
+
+    }
+  });
+}
 
   console.log('%c⚡ Codewise — Building in public ✨', 'color: #d4a843; font-weight: bold; font-size: 14px;');
 });
