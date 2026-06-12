@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }, 2500);
 
   // ── CONTACT FORM ──
-  const contactForm = document.getElementById('contactForm');
+const contactForm = document.getElementById('contactForm');
 
 if (contactForm) {
   contactForm.addEventListener('submit', async (e) => {
